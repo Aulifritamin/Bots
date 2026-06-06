@@ -99,6 +99,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d0031200c64b8064d8075dab376b2683, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -109,6 +113,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0031200c64b8064d8075dab376b2683, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7011195265315623249}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0031200c64b8064d8075dab376b2683, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8035641066321217764}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0031200c64b8064d8075dab376b2683, type: 3}
       insertIndex: -1
       addedObject: {fileID: 164430038375410616}
@@ -140,6 +147,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _inventory: {fileID: 164430038375410616}
+  _movement: {fileID: 8035641066321217764}
+--- !u!114 &8035641066321217764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8299881703511142016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2aac2c756f1e40838408b58936369fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleMovement
+  _vehicle: {fileID: 0}
+  _agent: {fileID: 0}
+  _targetPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &164430038375410616
 MonoBehaviour:
   m_ObjectHideFlags: 0

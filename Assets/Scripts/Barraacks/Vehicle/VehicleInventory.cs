@@ -8,20 +8,23 @@ public class VehicleInventory : MonoBehaviour
     private int _capacity = 1;
     private int _currentLoad = 0;
 
+    private Vector3 _inventoryScale = new Vector3(0.1f, 0.1f, 0.1f);
+
     private List<Minerals> _minerals = new List<Minerals>();
 
-    public void AddMineral(Minerals mineral)
+    public bool AddMineral(Minerals mineral)
     {
         if (_minerals.Count >= _capacity)
         {
-            return;
+            return false;
         }
 
         _minerals.Add(mineral);
         mineral.transform.SetParent(_trunk, false);
         mineral.transform.localPosition = Vector3.zero;
-        mineral.ChangeScale();
+        mineral.transform.localScale = _inventoryScale;
         _currentLoad++;
+        return true;
     }
 
     public void DropMinerals()
@@ -38,8 +41,6 @@ public class VehicleInventory : MonoBehaviour
 
     public List<Minerals> GetMinerals()
     {
-        List<Minerals> mineralsCopy = new List<Minerals>(_minerals);
-        
-        return mineralsCopy;
+        return new List<Minerals>(_minerals);
     }
 }

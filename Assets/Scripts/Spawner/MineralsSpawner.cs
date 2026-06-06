@@ -39,16 +39,6 @@ public class MineralsSpawner : MonoBehaviour
         StartCoroutine(Activate());
     }
 
-    private void OnEnable()
-    {
-        _mineralPrefub.OnMineralCollected += ReturningMineralToPool;
-    }
-
-    private void OnDisable()
-    {
-        _mineralPrefub.OnMineralCollected -= ReturningMineralToPool;
-    }
-
     private IEnumerator Activate()
     {
         WaitForSeconds wait = new WaitForSeconds(_spawnInterval);
@@ -58,9 +48,11 @@ public class MineralsSpawner : MonoBehaviour
             yield return wait;
 
             if (_freePoints.Count == 0)
-                continue;
+                {
+                    continue;
+                }
 
-            Minerals mineral = _mineralsPool.Get();
+            _mineralsPool.Get();
         }
     }
 
@@ -69,13 +61,13 @@ public class MineralsSpawner : MonoBehaviour
         Transform spawnPoint = GetRandomPosition();
         mineral.gameObject.SetActive(true);
         mineral.Init(spawnPoint);
-        mineral.OnMineralCollected += ReturningMineralToPool;
+        mineral.MineralCollected += ReturningMineralToPool;
     }
 
     private void ReleasingToPool(Minerals mineral)
     {
+        mineral.MineralCollected -= ReturningMineralToPool;
         mineral.gameObject.SetActive(false);
-        mineral.OnMineralCollected -= ReturningMineralToPool;
     }
 
     private void ReturningMineralToPool(Minerals mineral)
@@ -85,9 +77,9 @@ public class MineralsSpawner : MonoBehaviour
             _occupiedPoints.Remove(mineral.SpawnPoint);
             _freePoints.Add(mineral.SpawnPoint);
 
-            if (mineral.transform.TryGetComponent(out spawnPoint point))
+            if (mineral.transform.TryGetComponent(out SpawnPoint point))
             {
-                point.ChangeAvaible();
+                point.ToggleAvailable();
             }
         }
             
@@ -107,9 +99,9 @@ public class MineralsSpawner : MonoBehaviour
         _occupiedPoints.Add(spawnPoint);
         _freePoints.Remove(spawnPoint);
 
-        if(spawnPoint.TryGetComponent(out spawnPoint point))
+        if(spawnPoint.TryGetComponent(out SpawnPoint point))
         {
-            point.ChangeAvaible();
+            point.ToggleUnavailable();
         }
 
         return spawnPoint;

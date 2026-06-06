@@ -7,17 +7,22 @@ public class UnitSpawner : MonoBehaviour
 {
     [SerializeField] private Vehicle _unitPrefab;
     [SerializeField] private int _unitCount = 3;
-    [SerializeField] private int _maxUnitCount = 10;
+    [SerializeField] private int _maxUnitCount = 5;
+
+    [SerializeField] private int _costUnit = 3;
 
     [SerializeField] private Transform _returnPos;
     [SerializeField] private Transform _pointsContainer;
     [SerializeField] private Transform[] _spawnPoints;
+    private int _spawnIndex = 0;
 
     private ObjectPool<Vehicle> _unitGrabberPool;
-    private Queue<Vehicle> _activeUnits = new Queue<Vehicle>();
 
-    public event Action<List<Minerals>> OnMineralsDelivered;
+    public int MaxUnitCount => _maxUnitCount;
+    public int CurrentUnitCount => _unitCount;
+    public int CostUnit => _costUnit;
 
+    public event Action<Vehicle> AddedUnit;
 
     private void Awake()
     {
@@ -27,21 +32,11 @@ public class UnitSpawner : MonoBehaviour
             actionOnRelease: unit => unit.gameObject.SetActive(false),
             actionOnDestroy: unit => Destroy(unit.gameObject),
             collectionCheck: false,
-            defaultCapacity: _unitCount,
+            defaultCapacity: _maxUnitCount,
             maxSize: _maxUnitCount
         );
 
         RefreshChildArray();
-    }
-
-    private void OnEnable()
-    {
-        _unitPrefab.OnVehicleAvailable += ReturnUnitToPool;
-    }
-
-    private void OnDisable()
-    {
-        _unitPrefab.OnVehicleAvailable -= ReturnUnitToPool;
     }
 
     private void Start()
@@ -49,23 +44,9 @@ public class UnitSpawner : MonoBehaviour
         InitUnits();
     }
 
-    private void ReturnUnitToPool(Vehicle vehicle)
+    public void InitNewUnit()
     {
-        _activeUnits.Enqueue(vehicle);
-        vehicle.OnVehicleAvailable -= ReturnUnitToPool;
-    }
-
-    private void SetDestination(Minerals target)
-    {
-        if (_activeUnits.Count == 0)
-        {
-            return;
-        }
-
-        Vehicle vehicle = _activeUnits.Dequeue();
-
-        vehicle.OnVehicleAvailable += ReturnUnitToPool;
-        vehicle.SetTarget(target.transform);
+        AddNewUnit();
     }
 
     private void InitUnits()
@@ -74,16 +55,29 @@ public class UnitSpawner : MonoBehaviour
         {
             Vehicle vehicle = _unitGrabberPool.Get();
             vehicle.SetReturnPos(_returnPos);
-            vehicle.transform.position = _spawnPoints[i].position;
+            vehicle.transform.position = _spawnPoints[_spawnIndex % _spawnPoints.Length].position;
+            _spawnIndex++;
             vehicle.gameObject.SetActive(true);
-            vehicle.OnMineralsDelivered += HandleMineralsDelivered;
-            _activeUnits.Enqueue(vehicle);
+            AddedUnit?.Invoke(vehicle);
         }
     }
 
-    private void HandleMineralsDelivered(List<Minerals> deliveredMinerals)
+    private void AddNewUnit()
     {
-        OnMineralsDelivered?.Invoke(deliveredMinerals);
+        Debug.Log($"{_unitCount}");
+
+        if (_unitCount >= _maxUnitCount)
+        {
+            return;
+        }
+
+        Vehicle vehicle = _unitGrabberPool.Get();
+        vehicle.SetReturnPos(_returnPos);
+        vehicle.transform.position = _spawnPoints[_spawnIndex % _spawnPoints.Length].position;
+        _spawnIndex++;
+        vehicle.gameObject.SetActive(true);
+        _unitCount++;
+        AddedUnit?.Invoke(vehicle);
     }
 
     [ContextMenu("Refresh Child Array")]
@@ -93,11 +87,8 @@ public class UnitSpawner : MonoBehaviour
         _spawnPoints = new Transform[pointCount];
 
         for (int i = 0; i < pointCount; i++)
+        {
             _spawnPoints[i] = _pointsContainer.GetChild(i);
-    }
-
-    public void MoveToMineral(Minerals target)
-    {
-        SetDestination(target);
+        }
     }
 }

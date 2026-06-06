@@ -1,4 +1,3 @@
 repository "Bots/Bots@1375285522201@cloud"
   path "/"
-    br "/main"
-    co "/main"
+    smartbranch "/main"
