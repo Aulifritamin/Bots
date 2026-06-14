@@ -470,6 +470,9 @@ PrefabInstance:
       addedObject: {fileID: 520478994087573449}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f7a2a7cefafe9a241a51da0a6b6630e9, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 64178788369024728}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f7a2a7cefafe9a241a51da0a6b6630e9, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 2993456721250301401}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f7a2a7cefafe9a241a51da0a6b6630e9, type: 3}
       insertIndex: -1
@@ -530,11 +533,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9602c90ae89a4035841afa568461e8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  _baseprefub: {fileID: 0}
   _unitSpawner: {fileID: 623751933255542239}
   _mineralDataBase: {fileID: 2515256650179800199}
   _mineralDetector: {fileID: 7770844577455970174}
   _vehicleManager: {fileID: 520478994087573449}
   _storage: {fileID: 9139276559909763599}
+  _inputListener: {fileID: 0}
 --- !u!114 &7770844577455970174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,6 +594,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ba34992e155f43f1b7dd17f9708c17e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VehicleMenager
+--- !u!114 &64178788369024728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6972535037164534684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6ced0aa13ad9434cb27b8c17ac42ddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Barrack
 --- !u!65 &2993456721250301401
 BoxCollider:
   m_ObjectHideFlags: 0

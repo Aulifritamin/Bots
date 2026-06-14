@@ -1,13 +1,20 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Orchestrator : MonoBehaviour
 {
+    [SerializeField] private Barrack _baseprefub;
+
     [SerializeField] private UnitSpawner _unitSpawner;
     [SerializeField] private MineralDataBase _mineralDataBase;
     [SerializeField] private MineralDetector _mineralDetector;
     [SerializeField] private VehicleManager _vehicleManager;
     [SerializeField] private Storage _storage;
+    [SerializeField] private InputListener _inputListener;
+
+    private ClickState _currentClickState = ClickState.WaitingForBase;
+    private Barrack _selectedBarrack;
 
     private void Awake()
     {
@@ -20,9 +27,9 @@ public class Orchestrator : MonoBehaviour
 
     private void OnEnable()
     {
+        _inputListener.MapClicked += OnClickDetected;
         _unitSpawner.AddedUnit += _vehicleManager.AddVehicle;
-        _mineralDetector.MineralDetected += _mineralDataBase.AddMineral;
-        _mineralDataBase.TaskAdded += _vehicleManager.AddingTask;
+        _mineralDetector.MineralDetected += OnMineralDetected;
         _vehicleManager.MineralsDelivered += _storage.AddMinerals;
         _vehicleManager.MineralsDelivered += _mineralDataBase.RemoveMineral;
         _storage.CountChanged += InitNewUnit;
@@ -30,15 +37,53 @@ public class Orchestrator : MonoBehaviour
 
     private void OnDisable()
     {
+        _inputListener.MapClicked -= OnClickDetected;
         _unitSpawner.AddedUnit -= _vehicleManager.AddVehicle;
-        _mineralDetector.MineralDetected -= _mineralDataBase.AddMineral;
-        _mineralDataBase.TaskAdded -= _vehicleManager.AddingTask;
+        _mineralDetector.MineralDetected -= OnMineralDetected;
         _vehicleManager.MineralsDelivered -= _storage.AddMinerals;
         _vehicleManager.MineralsDelivered -= _mineralDataBase.RemoveMineral;
         _storage.CountChanged -= InitNewUnit;
     }
 
-    private void InitNewUnit(Dictionary<string, int> storage)
+    private void OnClickDetected(RaycastHit hit)
+    {
+        if (_currentClickState == ClickState.WaitingForBase)
+        {
+            if (hit.collider.TryGetComponent(out Barrack barrack))
+            {
+                Debug.Log("found collide barak");
+                if (barrack.CheckAvaible())
+                {
+                    _selectedBarrack = barrack;
+                    _currentClickState = ClickState.WaitingForGround;
+                }
+            }
+        }
+
+        else if (_currentClickState == ClickState.WaitingForGround)
+        {
+            Debug.Log("need ground");
+            if (hit.collider.CompareTag("Ground"))
+            {
+                Vector3 targetGroundPos = hit.point;
+
+                Instantiate(_baseprefub, targetGroundPos, Quaternion.identity);
+                _selectedBarrack.Increase();
+
+                _currentClickState = ClickState.WaitingForBase;
+            }
+        }
+    }
+
+    private void OnMineralDetected(Minerals mineral)
+    {
+        if (_mineralDataBase.AddMineral(mineral))
+        {
+            _vehicleManager.AddingTask(mineral);
+        }
+    }
+
+    private void InitNewUnit(IReadOnlyDictionary<string, int> storage)
     {
         foreach (var amount in storage)
         {
@@ -50,4 +95,6 @@ public class Orchestrator : MonoBehaviour
             }
         }
     }
+
+    private enum ClickState { WaitingForBase, WaitingForGround }
 }

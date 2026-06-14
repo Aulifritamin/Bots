@@ -6,7 +6,7 @@ public class Storage : MonoBehaviour
 {
     private Dictionary<string, int> _storage = new Dictionary<string, int>();
 
-    public Action<Dictionary<string, int>> CountChanged;
+    public event Action<IReadOnlyDictionary<string, int>> CountChanged;
 
     public void AddMinerals(List<Minerals> deliveredMinerals)
     {

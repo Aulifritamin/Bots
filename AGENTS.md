@@ -4,11 +4,11 @@
 - Active scene:
   - Name: SampleScene
   - Tags:
-    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, Mineral
+    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, Mineral, Ground
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Mineral, Water, UI
 - Active game object:
-  - Name: Text (TMP)
+  - Name: InputLisener
   - Tag: Untagged
-  - Layer: UI
+  - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

@@ -23,10 +23,10 @@ public class StorageView : MonoBehaviour
         _storage.CountChanged -= RefreshView;
     }
 
-    private void RefreshView(Dictionary<string, int> storage)
+    private void RefreshView(IReadOnlyDictionary<string, int> storage)
     {
         _text.text = "Storage Capacity:\n";
-        
+
         foreach (var kvp in storage)
         {
             _text.text += $"{kvp.Key}: {kvp.Value}\n";

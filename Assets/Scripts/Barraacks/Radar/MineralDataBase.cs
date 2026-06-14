@@ -6,11 +6,16 @@ public class MineralDataBase : MonoBehaviour
 {
     private HashSet<Minerals> _knownMinerals = new HashSet<Minerals>();
 
-    public event Action<Minerals> TaskAdded;
-
-    public void AddMineral(Minerals mineral)
+    public bool AddMineral(Minerals mineral)
     {
-        AddToDataBase(mineral);
+        if (_knownMinerals.Add(mineral))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void RemoveMineral(List<Minerals> minerals)
@@ -18,14 +23,6 @@ public class MineralDataBase : MonoBehaviour
         foreach (Minerals mineral in minerals)
         {
             RemoveFromDataBase(mineral);
-        }
-    }
-
-    private void AddToDataBase(Minerals mineral)
-    {
-        if (_knownMinerals.Add(mineral))
-        {
-            TaskAdded?.Invoke(mineral);
         }
     }
 

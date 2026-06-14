@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Mineral
+  - Ground
   layers:
   - Default
   - TransparentFX
