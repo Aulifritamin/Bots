@@ -8,6 +8,18 @@ public class Storage : MonoBehaviour
 
     public event Action<IReadOnlyDictionary<string, int>> CountChanged;
 
+    public int GetMineralCount()
+    {
+        int totalCount = 0;
+
+        foreach (var count in _storage.Values)
+        {
+            totalCount += count;
+        }
+        
+        return totalCount;
+    }
+
     public void AddMinerals(List<Minerals> deliveredMinerals)
     {
         foreach (Minerals mineral in deliveredMinerals)

@@ -8,7 +8,7 @@
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Mineral, Water, UI
 - Active game object:
-  - Name: InputLisener
+  - Name: Unit(Clone)
   - Tag: Untagged
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

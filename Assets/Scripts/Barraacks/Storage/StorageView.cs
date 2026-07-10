@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Storage))]
 public class StorageView : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private TextMeshPro _text;
     [SerializeField] private Storage _storage;
 
     private void Awake()
@@ -25,11 +25,9 @@ public class StorageView : MonoBehaviour
 
     private void RefreshView(IReadOnlyDictionary<string, int> storage)
     {
-        _text.text = "Storage Capacity:\n";
-
         foreach (var kvp in storage)
         {
-            _text.text += $"{kvp.Key}: {kvp.Value}\n";
+            _text.text = $"{kvp.Key}: {kvp.Value}";
         }
     }
 }

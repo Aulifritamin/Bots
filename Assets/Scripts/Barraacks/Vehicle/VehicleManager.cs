@@ -7,7 +7,11 @@ public class VehicleManager : MonoBehaviour
     private Queue<Vehicle> _activeUnits = new Queue<Vehicle>();
     private Queue<Minerals> _pendingTasks = new Queue<Minerals>();
 
-    public Action<List<Minerals>> MineralsDelivered;
+    private bool _buildingVehicle = false;
+    private Vehicle _baseBuildingVehicle;
+
+    public event Action<List<Minerals>> MineralsDelivered;
+    public event Action<Vehicle> BuildingVehicleAvailable;
 
     public void AddingTask(Minerals mineral)
     {
@@ -21,6 +25,11 @@ public class VehicleManager : MonoBehaviour
         TryActivateVehicle();
     }
 
+    public void NeedToBuildVehicle()
+    {
+        _buildingVehicle = true;
+    }  
+
     private void TryActivateVehicle()
     {
         if (_activeUnits.Count == 0)
@@ -30,6 +39,14 @@ public class VehicleManager : MonoBehaviour
 
         if (_pendingTasks.Count == 0)
         {
+            return;
+        }
+
+        if (_buildingVehicle)
+        {
+            _baseBuildingVehicle = _activeUnits.Dequeue();
+            _buildingVehicle = false;
+            BuildingVehicleAvailable?.Invoke(_baseBuildingVehicle);
             return;
         }
 

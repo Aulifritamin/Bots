@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 public class UnitSpawner : MonoBehaviour
 {
     [SerializeField] private Vehicle _unitPrefab;
-    [SerializeField] private int _unitCount = 3;
+    [SerializeField] private int _InitUnitCount = 3;
     [SerializeField] private int _maxUnitCount = 5;
 
     [SerializeField] private int _costUnit = 3;
@@ -19,8 +19,8 @@ public class UnitSpawner : MonoBehaviour
     private ObjectPool<Vehicle> _unitGrabberPool;
 
     public int MaxUnitCount => _maxUnitCount;
-    public int CurrentUnitCount => _unitCount;
     public int CostUnit => _costUnit;
+    public int CurrentUnitCount  {get; private set;} = 0;
 
     public event Action<Vehicle> AddedUnit;
 
@@ -48,35 +48,57 @@ public class UnitSpawner : MonoBehaviour
     {
         AddNewUnit();
     }
+    
+    public void DecreaseUnitCount()
+    {
+        if (CurrentUnitCount > 0)
+        {
+            CurrentUnitCount--;
+        }
+    }
+
+    public void IsNewBase()
+    {
+        _InitUnitCount = 0;
+    }
+
+    public Transform GetReturnTransform()
+    {
+        return _returnPos;
+    }
+
+    public void AddExistingUnit(Vehicle vehicle)
+    {
+        vehicle.SetUnitSpawner(this);
+        vehicle.SetSpawnPosition(_spawnPoints[_spawnIndex % _spawnPoints.Length].position);
+        vehicle.SetReturnBasePosition(_returnPos);
+        _spawnIndex++;
+        AddedUnit?.Invoke(vehicle);
+        CurrentUnitCount++;
+    }
 
     private void InitUnits()
     {
-        for (int i = 0; i < _unitCount; i++)
+        for (int i = 0; i < _InitUnitCount; i++)
         {
-            Vehicle vehicle = _unitGrabberPool.Get();
-            vehicle.SetReturnPos(_returnPos);
-            vehicle.transform.position = _spawnPoints[_spawnIndex % _spawnPoints.Length].position;
-            _spawnIndex++;
-            vehicle.gameObject.SetActive(true);
-            AddedUnit?.Invoke(vehicle);
+            AddNewUnit();
         }
     }
 
     private void AddNewUnit()
     {
-        Debug.Log($"{_unitCount}");
-
-        if (_unitCount >= _maxUnitCount)
+        if (CurrentUnitCount >= _maxUnitCount)
         {
             return;
         }
 
         Vehicle vehicle = _unitGrabberPool.Get();
-        vehicle.SetReturnPos(_returnPos);
-        vehicle.transform.position = _spawnPoints[_spawnIndex % _spawnPoints.Length].position;
+        vehicle.SetUnitSpawner(this);
+        vehicle.SetReturnBasePosition(_returnPos);
+        vehicle.SetSpawnPosition(_spawnPoints[_spawnIndex % _spawnPoints.Length].position);
         _spawnIndex++;
         vehicle.gameObject.SetActive(true);
-        _unitCount++;
+        CurrentUnitCount++;
         AddedUnit?.Invoke(vehicle);
     }
 

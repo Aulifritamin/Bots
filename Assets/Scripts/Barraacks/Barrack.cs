@@ -2,21 +2,31 @@ using UnityEngine;
 
 public class Barrack : MonoBehaviour
 {
-    public int _maxFlag { get; } = 1;
-    public int _currentFlag { get; private set; } = 0;
-
-    public void Increase()
-    {
-        _currentFlag++;
-    }
-
-    public bool CheckAvaible()
-    {
-        return _currentFlag < _maxFlag;
-    }
+    [SerializeField] private UnitSpawner _unitSpawner;
 
     public void SetPosition(Vector3 position)
     {
         transform.position = position;
+    }
+
+    public void SetActive()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void SetInactive()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public Transform GetUnitReturnTransform()
+    {
+        return _unitSpawner.GetReturnTransform();
+    }
+
+    public void AddUnitToNewBase(Vehicle unit)
+    {
+        _unitSpawner.IsNewBase();
+        _unitSpawner.AddExistingUnit(unit);
     }
 }

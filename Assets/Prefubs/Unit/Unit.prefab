@@ -101,7 +101,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d0031200c64b8064d8075dab376b2683, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -160,8 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2aac2c756f1e40838408b58936369fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VehicleMovement
-  _vehicle: {fileID: 0}
-  _agent: {fileID: 0}
+  _agent: {fileID: 7590537140916979108}
   _targetPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &164430038375410616
 MonoBehaviour:

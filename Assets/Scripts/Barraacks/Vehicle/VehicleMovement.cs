@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,7 +6,7 @@ using UnityEngine.AI;
 public class VehicleMovement : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent _agent;
-    [SerializeField] private Vector3 _targetPosition;
+    private Vector3 _targetPosition;
 
     private void Awake()
     {

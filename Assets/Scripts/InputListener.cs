@@ -31,17 +31,12 @@ public class InputListener : MonoBehaviour
 
     private void OnClick(InputAction.CallbackContext context)
     {
-
-        Debug.Log("1. КНОПКА НАЖАТА! Связь с Input System работает.");
-
         Vector2 screenPosition = _positionAction.ReadValue<Vector2>();
-        Debug.Log($"2. Координаты мыши на экране: {screenPosition}");
 
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
-            Debug.Log("CLick");
             MapClicked?.Invoke(hit);
         }
     }

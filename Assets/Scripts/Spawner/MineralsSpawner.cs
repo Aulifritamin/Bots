@@ -84,7 +84,6 @@ public class MineralsSpawner : MonoBehaviour
         }
             
         _mineralsPool.Release(mineral);
-        Debug.Log($"Mineral returned to pool. Free points count: {_freePoints.Count}");
     }
 
     private Transform GetRandomPosition()
