@@ -88,7 +88,6 @@ public class MineralsSpawner : MonoBehaviour
 
     private Transform GetRandomPosition()
     {
-        Debug.Log($"Free points count: {_freePoints.Count}");
         int minIndex = 0;
         int maxIndex = _freePoints.Count;
 
